@@ -22,13 +22,9 @@ struct Usuario {
     int idUser;
     char nomeUser[MAX_NOME_USER];
     char senha[MAX_TAM_SENHA];
+    int tipo;
 };
 
-struct Administrador {
-    int idAdmin;
-    char nomeAdmin[MAX_NOME_USER];
-    char senhaAdmin[MAX_TAM_SENHA];
-};
 
 struct Pedido{
     int idPedido;
@@ -42,12 +38,10 @@ struct Pedido{
 void interageAdmin(struct Produto *produto, struct Usuario *usuario, int *tamanho, int tam);
 void adicionarProduto(struct Produto *produto, int *tamanho);
 void listarProdutos(struct Produto *produto, int tamanho);
-void adicionarAdministrador(struct Administrador *admin, int tam);
-void excluirAdministrador(struct Administrador *admin, int tam);
-void controleMenuAdmin(struct Administrador *admin, struct Usuario *usuario, struct Produto *produto, int tentativas, int chances, int tam);
-void adicionarUsuario(struct Usuario *usuario, int *tam);
+void controleMenuAdmin( struct Usuario *usuario, struct Produto *produto, int tentativas, int chances, int tam);
+void adicionarUsuario( struct Usuario *usuario, int *tam);
 void excluirUsuario(struct Usuario *usuario, int *tam);
-void listarUsuarios(struct Usuario *usuario, int tam);
+void listarUsuarios( struct Usuario *usuario, int tam);
 void salvarUsuarios(struct Usuario *usuario, int *tam);
 void salvarProdutos(struct Produto *produto, int *tamanho);
 

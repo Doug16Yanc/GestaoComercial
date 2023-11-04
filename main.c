@@ -1,24 +1,25 @@
 #include "sgc.h"
 
 int main(void) {
-    struct Administrador admin[MAX_USUARIOS];
-    struct Administrador novoAdmin;
     struct Usuario usuario[MAX_USUARIOS];
+    struct Usuario usuarioAdic;
     int tam = 0;
 
     printf("*************************************************************\n");
     printf("Seja mais que bem-vindo(a) ao supermercado Sonata das Compras\n");
     printf("Faça o cadastro de um primeiro administrador:\n");
     printf("Digite o nome do novo administrador: ");
-    scanf(" %[^\n]s", novoAdmin.nomeAdmin);
+    scanf(" %[^\n]s", usuarioAdic.nomeUser);
 
     printf("Digite a senha do novo administrador: ");
-    scanf(" %[^\n]s", novoAdmin.senhaAdmin);
+    scanf(" %[^\n]s", usuarioAdic.senha);
 
     printf("Digite o id do novo administrador:");
-    scanf("%d", &novoAdmin.idAdmin);
+    scanf("%d", &usuarioAdic.idUser);
+    
+    usuario->tipo = 1;
 
-    admin[tam++] = novoAdmin;
+    usuario[tam++] = usuarioAdic;
 
     printf("Novo administrador adicionado com sucesso.\n");
 
@@ -35,7 +36,7 @@ int main(void) {
 
         switch (opcao) {
             case 1:
-                controleMenuAdmin(admin, usuario, produto, tentativas, chances, tam);
+                controleMenuAdmin(usuario, produto, tentativas, chances, tam);
                 break;
             case 2:
                 controleMenuUsuario(produto, usuario, tamanho, tam);
@@ -51,8 +52,6 @@ int main(void) {
     
     return 0;
 }
-
-
 
 
 
