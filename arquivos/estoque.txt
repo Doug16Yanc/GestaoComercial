@@ -1,0 +1,20 @@
+Id : 10
+ Descrição : arroz
+ Estoque: 300
+ Preço unitário : 3.00
+Id : 2
+ Descrição : feijão
+ Estoque: 200
+ Preço unitário : 5.00
+Id : 3
+ Descrição : ovos
+ Estoque: 200
+ Preço unitário : 0.50
+Id : 4
+ Descrição : carnes
+ Estoque: 200
+ Preço unitário : 12.00
+Id : 5
+ Descrição : macarrão
+ Estoque: 230
+ Preço unitário : 4.00

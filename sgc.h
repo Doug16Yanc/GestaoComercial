@@ -32,16 +32,19 @@ struct Pedido{
     float valorTotal;
 };
 
-
+struct SuperAdmin{
+    char nomeAdmin[MAX_NOME_USER];
+    char senhaAdmin[MAX_TAM_SENHA];
+};
 /*Funções para o escopo dos usuários do tipo administrador*/
-
+void geraInteracao();
 void interageAdmin(struct Produto *produto, struct Usuario *usuario, int *tamanho, int tam);
 void adicionarProduto(struct Produto *produto, int *tamanho);
 void listarProdutos(struct Produto *produto, int tamanho);
-void controleMenuAdmin( struct Usuario *usuario, struct Produto *produto, int tentativas, int chances, int tam);
 void adicionarUsuario( struct Usuario *usuario, int *tam);
 void excluirUsuario(struct Usuario *usuario, int *tam);
 void listarUsuarios( struct Usuario *usuario, int tam);
+void controleMenuAdmin( struct Usuario *usuario, struct Produto *produto, int tentativas, int chances, int tam);
 void salvarUsuarios(struct Usuario *usuario, int *tam);
 void salvarProdutos(struct Produto *produto, int *tamanho);
 
@@ -50,7 +53,7 @@ void salvarProdutos(struct Produto *produto, int *tamanho);
 void controleMenuUsuario(struct Produto *produto, struct Usuario *usuario, int tamanho, int tam);
 void interageUsuario(struct Produto *produto, struct Usuario *usuario, int *tamanho, int tam);
 void fazerPedidos(struct Produto *produto, struct Pedido *pedido, int *tamanho, int *tamPedido);
-void listaPedidos(struct Pedido *pedido, int tamPedido);
+void listaPedidos(struct Pedido *pedido, int *tamPedido);
 void salvarPedidos(struct Pedido *pedido, int *tamPedido);
 
 #endif
