@@ -1,0 +1,10 @@
+Id do produto: 1
+ Descrição : arroz
+ Quantidade : 10
+ Preço unitário : 4.50
+ Valor total : 45.00
+Id do produto: 2
+ Descrição : feijão
+ Quantidade : 5
+ Preço unitário : 6.80
+ Valor total : 34.00

@@ -1,58 +1,25 @@
 #include "sgc.h"
 
-void geraInteracao(){
-    struct Usuario usuario[MAX_USUARIOS]; 
-    struct Produto produto[MAX_PRODUTOS];
-    struct Usuario usuarioAdic;
-    int tam = 0;
-    int opcao, tamanho = 0, tentativas = 0, chances = 3;
-    
-    do {
-        printf("\nBem-vindo(a) ao supermercado Sonata das compras\n");
-        printf("        CONTROLE DE ACESSO E PRIVILÉGIO         \n");
-        printf("  |      1 -  Administrador                     |\n");
-        printf("  |      2 -  Usuário convencional              |\n");
-        printf("  |      3 - Encerrar aplicação                 |\n");
-        scanf("%d", &opcao);
-
-        switch (opcao) {
-            case 1:
-                controleMenuAdmin(usuario, produto, tentativas, chances, tam);
-                break;
-            case 2:
-                controleMenuUsuario(produto, usuario, tamanho, tam);
-                break;
-            case 3:
-                printf("Agradeço por sua interação comigo, até logo!\n");
-                exit(1);
-            default:
-                printf("Opção inexistente, escolha 1, 2 ou 3.\n");
-                break;
-        }
-    } 
-    while (opcao != 3);
-        
-}
-
-
-void interageAdmin(struct Produto *produto, struct Usuario *usuario, int *tamanho, int tam) {
+void interageAdmin(struct Produto *produto, struct Usuario *usuario, int *tamanho, int *tam) {
+    int opcao, chances = 3, tentativas = 0;
     struct Pedido *pedido;
-    struct Administrador *admin;
-    int opcao, *tamPedido = 0;
+    int *tamPedido = 0;
 
     printf("****************************************************************\n");
+    printf("        Bem-vindo(a) ao supermercado Sonata das Compras         \n");
     printf("                PÁGINA DO ADMINISTRADOR                         \n");
     printf("Bem-vindo(a), caro(a) administrador(a)\n");
 
     do {
-        printf("Selecione sua alternativa:\n");
+        printf("        CONTROLE DE ACESSO E PRIVILÉGIO         \n");
         printf(" (1) Adicionar produto\n");
         printf(" (2) Listar produtos no estoque\n");
         printf(" (3) Adicionar usuário\n");
         printf(" (4) Listar usuários  \n");
         printf(" (5) Excluir usuário\n");
         printf(" (6) Ceder espaço ao usuário:\n");
-        printf(" (6) Retornar ao início\n");
+        printf(" (7) Ceder espaço ao outro administrador:\n");
+        printf(" (8) Encerrar aplicação\n");
 
         scanf("%d", &opcao);
 
@@ -64,20 +31,23 @@ void interageAdmin(struct Produto *produto, struct Usuario *usuario, int *tamanh
                 listarProdutos(produto, *tamanho);
                 break;
             case 3:
-                adicionarUsuario(usuario, &tam);
+                adicionarUsuario(usuario, tam);
                 break;
             case 4:
-                listarUsuarios(usuario, tam);
+                listarUsuarios(usuario, *tam);
                 break;
             case 5:
-                excluirUsuario(usuario, &tam);
+                excluirUsuario(usuario, tam);
                 break;
             case 6:
-                controleMenuUsuario(produto, usuario, *tamanho, tam);
+                controleMenuUsuario(produto, usuario, *tamanho, *tam);
                 break;
             case 7:
-                printf("Retornando...\n");
-                geraInteracao();
+                controleMenuAdmin(usuario, produto, tentativas, chances, tam);
+                break;
+            case 8:
+                printf("Foi um prazer sua interação comigo, até logo!\n");
+                exit(1);
                 break;
             default:
                 printf("Alternativa impossível!\n");
@@ -138,6 +108,7 @@ void listarProdutos(struct Produto *produto, int tamanho) {
 
 void adicionarUsuario( struct Usuario *usuario, int *tam) {
     struct Usuario usuarioAdic;
+
     usuarioAdic.nomeUser == (char *)malloc(MAX_NOME_USER * sizeof(char));
 
     int escolha;
@@ -179,10 +150,10 @@ void adicionarUsuario( struct Usuario *usuario, int *tam) {
     printf("       > Nome : %s\n", usuarioAdic.nomeUser);
     printf("        > Senha : %s \n", usuarioAdic.senha);
     if (usuarioAdic.tipo == 1){
-        printf("     > ADMINISTRADOR\n");
+        printf("       > ADMINISTRADOR\n");
     }
     else if (usuarioAdic.tipo == 2){
-        printf("     > CONVENCIONAL\n");
+        printf("       > CONVENCIONAL\n");
     }
     printf("************************************************\n");
     
@@ -226,7 +197,7 @@ void listarUsuarios(struct Usuario *usuario, int tam){
             printf("        > Id do usuário : %d\n", usuario[i].idUser);
             printf("        > Nome : %s\n", usuario[i].nomeUser);
             printf("        > Senha : %s\n", usuario[i].senha);
-            printf("Tipo: %s\n", (usuario[i].tipo == 1) ? "Administrador" : "Convencional");
+            printf("        >Tipo: %s\n", (usuario[i].tipo == 1) ? "Administrador" : "Convencional");
             printf("\n-----------------------------------------------\n");
         }
     }
@@ -235,7 +206,7 @@ void listarUsuarios(struct Usuario *usuario, int tam){
     }
 }
 
-void controleMenuAdmin(struct Usuario *usuario, struct Produto *produto, int tentativas, int chances, int tam) { 
+void controleMenuAdmin(struct Usuario *usuario, struct Produto *produto, int tentativas, int chances, int *tam) { 
 
     int tamanho = 0, possibilidades = 3;
     printf("                    LOGIN                   \n");
@@ -251,7 +222,7 @@ void controleMenuAdmin(struct Usuario *usuario, struct Produto *produto, int ten
         scanf(" %[^\n]s", senha);
 
         int administradorEncontrado = 0;
-        for (int i = 0; i < tam; i++) {
+        for (int i = 0; i < *tam; i++) {
             if (strcmp(nome, usuario[i].nomeUser) == 0 && strcmp(senha, usuario[i].senha) == 0) {
                 acessou = 1;
                 administradorEncontrado = 1;

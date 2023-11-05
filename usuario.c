@@ -1,21 +1,26 @@
 #include "sgc.h"
 
 void controleMenuUsuario(struct Produto *produto, struct Usuario *usuario, int tamanho, int tam) {
+    struct Pedido *pedido = (struct Pedido *)malloc(sizeof(struct Pedido) * MAX_PEDIDOS); 
+    if (pedido == NULL) {
+        printf("Não há memória disponível.\n");
+        exit(1);
+    }
 
-    interageUsuario(produto, usuario, &tamanho, tam);
-    
+    interageUsuario(produto, pedido, usuario, &tamanho, tam);
+    free(pedido);
 }
 
-void interageUsuario(struct Produto *produto, struct Usuario *usuario, int *tamanho, int tam){
-    struct Pedido *pedido; 
-    int tamPedido;
+void interageUsuario(struct Produto *produto, struct Pedido *pedido, struct Usuario *usuario, int *tamanho, int tam){
+    int tamPedido = 0;
 
     int opcao;
     
     do{
         printf("                    PÁGINA DO USUÁRIO                   \n");
         printf("********************************************************\n");
-        printf("* Bem-vindo(a), caríssimo(a), %s, o que temos para hoje? *\n", usuario->nomeUser);
+        printf("        Bem-vindo(a) ao supermercado Sonata das Compras         \n");
+        printf("* Bem-vindo(a), caríssimo(a), o que temos para hoje? *\n");
         printf("        (1) - Fazer pedidos           \n");
         printf("        (2) - Listar produtos         \n");
         printf("        (3) - Listar pedidos          \n");
@@ -31,11 +36,11 @@ void interageUsuario(struct Produto *produto, struct Usuario *usuario, int *tama
                 listarProdutos(produto, *tamanho);
                 break;
             case 3:
-                listaPedidos(pedido, &tamPedido);
+                listaPedidos(pedido, tamPedido);
                 break;
             case 4:
                 printf("Retornando...\n");
-                return;
+                exit(1);
                 break;
             default:
                 printf("Alternativa impossível.\n");
@@ -48,29 +53,32 @@ void interageUsuario(struct Produto *produto, struct Usuario *usuario, int *tama
 }
 
 void fazerPedidos(struct Produto *produto, struct Pedido *pedido, int *tamanho, int *tamPedido){
-    
-    int codigo;
+
+    int determina, codigo = 0, produtoEncontrado = 0;
     
     printf("Solicitando operação para realizar pedidos...\n");
     
     if (*tamanho > 0){
+        
+        printf("Digite qualquer outro número para continuar ou -1 para encerrar:");
+        scanf("%d", &determina);
 
-        do{
+        while(determina != -1){
             printf("Digite o id do produto ou a saída do programa com -1:\n");
             scanf("%d", &codigo);
-            
-            if (codigo == -1){
-                break;
-            }
             
             for (int i = 0; i < *tamanho; i++){
                 if (codigo == produto[i].idProd){
                     printf("Digite a quantidade de %s : ", produto[i].nomeProd);
                     scanf("%d", &pedido[i].quanti);
+                    produtoEncontrado = 1;
                     
                     if (pedido[i].quanti <= produto[i].quantidade){
-                        printf("%d adicionados(as) ao carrinho de compras.\n", pedido[i].quanti);
-                        pedido[(*tamPedido)++];
+                        printf("%d adicionado(a)(s) ao carrinho de compras.\n", pedido[i].quanti);
+                        strcpy(pedido[*tamPedido].nomeProd, produto[i].nomeProd);
+                        (pedido[*tamPedido].idProd = produto[i].idProd);
+                        (pedido[*tamPedido].preco = produto[i].preco);
+                        (*tamPedido)++;
                         produto[i].quantidade -= pedido[i].quanti;
                         pedido[i].valorTotal += pedido[i].quanti * produto[i].preco;
                         salvarPedidos(pedido, tamPedido);
@@ -80,33 +88,34 @@ void fazerPedidos(struct Produto *produto, struct Pedido *pedido, int *tamanho, 
                         printf("Não há estoque suficiente dessa mercadoria.\n");
                     }
                 }
-                else{
-                    printf("Id de produto inexistente.\n");
-                }
             }
-        
+            if (!produtoEncontrado){
+                printf("Id de produto não encontrado.\n");
+            }
+            printf("Digite qualquer outro número para continuar ou -1 para encerrar:");
+            scanf("%d", &determina);
         }
-        while(1);
     }
     else{
         printf("Sem estoque ainda.\n");
     }
 }
 
-void listaPedidos(struct Pedido *pedido, int *tamPedido) {
+void listaPedidos(struct Pedido *pedido, int tamPedido) {
     
     struct Produto *produto;
     struct Usuario *usuario;
     int tamanho, tam;
     
-    if (*tamPedido > 0){
+    if (tamPedido > 0){
         printf("Lista de Pedidos:\n");
-        for (int i = 0; i < *tamPedido; i++) {
-            printf(" > Id do pedido: %d\n", pedido[i].idPedido);
-            printf(" > Id do produto : %d \n", produto[i].idProd);
-            printf(" > Nome : %s \n", produto[i].nomeProd);
+        for (int i = 0; i < tamPedido; i++) {
+            printf(" > Id do pedido: %d\n", i + 1);
+            printf(" > Id do produto : %d \n", pedido[i].idProd);
+            printf(" > Nome : %s \n", pedido[i].nomeProd);
             printf(" > Quantidade : %d\n", pedido[i].quanti);
-            printf(" > Preço unitário : R$ %.2f\n", produto[i].preco);
+            printf(" > Preço unitário : R$ %.2f\n", pedido[i].preco);
+            printf(" > Preço total : R$ %.2f\n", pedido[i].valorTotal);
             printf("\n");
         
         }
@@ -114,9 +123,6 @@ void listaPedidos(struct Pedido *pedido, int *tamPedido) {
     else{
         printf("Sem pedidos feitos.\n");
     }
-    interageAdmin(produto, usuario, &tamanho, tam);
-
-    
 }
 
 void salvarPedidos(struct Pedido *pedido, int *tamPedido) {
@@ -129,8 +135,9 @@ void salvarPedidos(struct Pedido *pedido, int *tamPedido) {
     }
     
     for (int i = 0; i < *tamPedido; i++) {
-        fprintf(fp, "Id : %d\n Quantidade : %d\n Valor total : %.2f\n", pedido[i].idPedido, pedido[i].quanti, pedido[i].valorTotal);
+        fprintf(fp, "Id do produto: %d\n Descrição : %s\n Quantidade : %d\n Preço unitário : %.2f\n Valor total : %.2f\n", pedido[i].idProd, pedido[i].nomeProd, pedido[i].quanti, pedido[i].preco, pedido[i].valorTotal);
     }
     
     fclose(fp);
 }
+
