@@ -58,6 +58,7 @@ void controleMenuUsuario(struct Produto *produto, struct Usuario *usuario, int t
 void interageUsuario(struct Produto *produto, struct Pedido *pedido, struct Usuario *usuario, int *tamanho, int tam);
 void fazerPedidos(struct Produto *produto, struct Pedido *pedido, int *tamanho, int *tamPedido);
 void listaPedidos(struct Pedido *pedido, int tamPedido);
+void cancelarPedidos(struct Produto *produto, struct Pedido *pedido, int *tamanho, int *tamPedido);
 void salvarPedidos(struct Pedido *pedido, int *tamPedido);
 
 #endif

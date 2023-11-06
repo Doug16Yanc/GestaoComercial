@@ -24,7 +24,8 @@ void interageUsuario(struct Produto *produto, struct Pedido *pedido, struct Usua
         printf("        (1) - Fazer pedidos           \n");
         printf("        (2) - Listar produtos         \n");
         printf("        (3) - Listar pedidos          \n");
-        printf("        (4) - Retornar ao início      \n");
+        printf("        (4) - Cancelar pedidos        \n");
+        printf("        (5) - Retornar ao início      \n");
         
         scanf("%d", &opcao);
         
@@ -39,8 +40,11 @@ void interageUsuario(struct Produto *produto, struct Pedido *pedido, struct Usua
                 listaPedidos(pedido, tamPedido);
                 break;
             case 4:
+                cancelarPedidos(produto, pedido, tamanho, &tamPedido);
+                break;
+            case 5:
                 printf("Retornando...\n");
-                exit(1);
+                interageAdmin(produto, usuario, tamanho, &tam);
                 break;
             default:
                 printf("Alternativa impossível.\n");
@@ -49,7 +53,7 @@ void interageUsuario(struct Produto *produto, struct Pedido *pedido, struct Usua
         }
 
     }
-    while(opcao != 4);
+    while(opcao != 5);
 }
 
 void fazerPedidos(struct Produto *produto, struct Pedido *pedido, int *tamanho, int *tamPedido){
@@ -82,7 +86,6 @@ void fazerPedidos(struct Produto *produto, struct Pedido *pedido, int *tamanho, 
                         produto[i].quantidade -= pedido[i].quanti;
                         pedido[i].valorTotal += pedido[i].quanti * produto[i].preco;
                         salvarPedidos(pedido, tamPedido);
-
                     }
                     else{
                         printf("Não há estoque suficiente dessa mercadoria.\n");
@@ -117,11 +120,31 @@ void listaPedidos(struct Pedido *pedido, int tamPedido) {
             printf(" > Preço unitário : R$ %.2f\n", pedido[i].preco);
             printf(" > Preço total : R$ %.2f\n", pedido[i].valorTotal);
             printf("\n");
-        
         }
     }
     else{
         printf("Sem pedidos feitos.\n");
+    }
+}
+
+void cancelarPedidos(struct Produto *produto, struct Pedido *pedido, int *tamanho, int *tamPedido){
+    int id;
+    
+    printf("Digite o id do produto a ser cancelado por pedido.\n");
+    scanf("%d", &id);
+    
+    for (int i = 0; i < *tamanho; i++){
+        if (id == produto[i].idProd){
+            printf("Produto encontrado com os seguintes dados...\n");
+            printf(" > Id do produto : %d \n", pedido[i].idProd);
+            printf(" > Nome : %s \n", pedido[i].nomeProd);
+            printf(" > Quantidade : %d\n", pedido[i].quanti);
+            printf(" > Preço unitário : R$ %.2f\n", pedido[i].preco);
+            printf(" > Preço total : R$ %.2f\n", pedido[i].valorTotal);
+            printf("\n");
+            (*tamPedido)--;
+            produto[i].quantidade += pedido[i].quanti;
+        }
     }
 }
 

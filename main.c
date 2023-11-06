@@ -37,17 +37,13 @@ int main(void) {
         printf("Administrador máximo não reconhecido. Encerrando...\n");
         exit(1);            /*Se errar nome ou senha, só havia uma chance, portanto, sistema encerra*/
     }
+    /*O administrador ao adicionar um usuário do tipo ADMINISTRADOR e ao escolher a opção de ceder espaço
+    ao outro administrador há solicitação de login e senha. Ao adicionar um usuário do tipo CONVENCIONAL,
+    a página do USUÁRIO é exibida diretamente para o usuário que foi cadastrado em última instância após retorno
+    à página do ADMINISTRADOR ou, no caso de nenhum usuário do tipo CONVENCIONAL ter sido cadastrado, o ADMINISTRADOR 
+    em instância acessa essa página e há permissão já que houve login e senha anteriormente.*/
         
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
+/*Nunca usei tanto ponteiro em toda minha vida*/
